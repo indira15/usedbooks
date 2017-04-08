@@ -2,6 +2,7 @@ package com.indira.usedbooks;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,9 +37,8 @@ public class BooksAdapter extends RecyclerView.Adapter<BookViewHolder> {
         Book book = mBookList.get(position);
         holder.nameView.setText(book.getName());
         holder.costView.setText(String.valueOf(book.getCost()));
-        ArrayList<Image> images = book.getImages();
-        if (images != null && images.size() > 0) {
-            Picasso.with(mContext).load(book.getImages().get(0).getUrl())
+        if (!TextUtils.isEmpty(book.getImageUrl())) {
+            Picasso.with(mContext).load(book.getImageUrl())
                     .placeholder(R.drawable.ic_launcher)
                     .into(holder.imageView);
         }
