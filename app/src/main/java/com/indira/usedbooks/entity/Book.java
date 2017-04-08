@@ -1,0 +1,80 @@
+package com.indira.usedbooks.entity;
+
+import java.util.ArrayList;
+
+/**
+ * Created by Manish on 08-04-2017.
+ */
+
+public class Book {
+
+    private int id;
+    private String name;
+    private String authorName;
+    private String edition;
+    private User user;
+    private ArrayList<Image> images;
+
+    public ArrayList<Image> getImages() {
+        return images;
+    }
+
+    public void setImages(ArrayList<Image> images) {
+        this.images = images;
+    }
+
+
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setAuthorName(String authorName) {
+        this.authorName = authorName;
+    }
+
+    public void setEdition(String edition) {
+        this.edition = edition;
+    }
+
+    public void setCost(double cost) {
+        this.cost = cost;
+    }
+
+    private double cost;
+
+    public String getName() {
+        return name;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public String getAuthorName() {
+        return authorName;
+    }
+
+    public String getEdition() {
+        return edition;
+    }
+
+    public double getCost() {
+        return cost;
+    }
+
+
+}
