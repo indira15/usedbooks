@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.indira.usedbooks.entity.Book;
-import com.indira.usedbooks.entity.Image;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;

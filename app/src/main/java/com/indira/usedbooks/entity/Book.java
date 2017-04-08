@@ -13,17 +13,16 @@ public class Book {
     private String authorName;
     private String edition;
     private User user;
-    private ArrayList<Image> images;
 
-    public ArrayList<Image> getImages() {
-        return images;
+    public String getImageUrl() {
+        return imageUrl;
     }
 
-    public void setImages(ArrayList<Image> images) {
-        this.images = images;
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
-
+    private String imageUrl;
 
     public User getUser() {
         return user;
