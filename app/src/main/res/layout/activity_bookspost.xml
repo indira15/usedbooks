@@ -37,20 +37,19 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Take a Picture"
-        android:layout_marginBottom="10dp"/>
+        android:layout_marginBottom="@dimen/margin_medium"/>
     <ImageView
         android:id="@+id/imgPreview"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="gone" />
-
+        android:layout_width="250dp"
+        android:layout_height="250dp"
+        android:visibility="invisible" />
 
     <Button
         android:id="@+id/submit"
         style="?android:textAppearanceSmall"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="@dimen/margin_medium"
         android:text="@string/Submit"
         android:textStyle="bold" />
 
