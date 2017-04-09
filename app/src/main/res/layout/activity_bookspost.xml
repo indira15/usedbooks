@@ -23,7 +23,7 @@
         android:id="@+id/edition"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/edtion"
+        android:hint="@string/edition"
         android:inputType="text" />
     <EditText
         android:id="@+id/cost"

@@ -32,6 +32,7 @@ public class BooksListActivity extends AppCompatActivity implements Callback<Boo
     private BooksAdapter booksAdapter;
     private ProgressBar mProgressBar;
     private FloatingActionButton fab;
+    public static String RESTART_ACTION = "restart_action";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -86,4 +87,16 @@ public class BooksListActivity extends AppCompatActivity implements Callback<Boo
         Utils.showToast(BooksListActivity.this, "Something went wrong");
     }
 
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        if (intent != null) {
+            if(RESTART_ACTION.equals(intent.getAction())) {
+                recyclerView.setVisibility(View.GONE);
+                mProgressBar.setVisibility(View.VISIBLE);
+                prepareBookData();
+            }
+        }
+    }
 }

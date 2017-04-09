@@ -17,48 +17,49 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Toast;
 
+import com.indira.usedbooks.entity.Response;
 import com.squareup.picasso.Picasso;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import retrofit2.Call;
+import retrofit2.Callback;
 
 
 /**
  * Created by Manish on 09-04-2017.
  */
 
-public class BookPostActivity extends AppCompatActivity implements OnClickListener{
+public class BookPostActivity extends AppCompatActivity implements OnClickListener,
+        Callback<Response> {
 
     private EditText bookname;
  private EditText authorname;
-    private EditText edition;
-    private EditText cost;
+    private EditText mEdition;
+    private EditText mCost;
     private Button submit;
     private Button capturepicture;
     private ImageView preview;
     static final int REQUEST_TAKE_PHOTO = 1;
     private String mCurrentPhotoPath;
-    private SQLiteHandler db;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bookspost);
-
         bookname = (EditText) findViewById(R.id.book_name);
         authorname = (EditText) findViewById(R.id.author_name);
-        edition = (EditText) findViewById(R.id.edition);
-        cost = (EditText) findViewById(R.id.cost);
+        mEdition = (EditText) findViewById(R.id.edition);
+        mCost = (EditText) findViewById(R.id.cost);
         submit = (Button) findViewById(R.id.submit);
         capturepicture = (Button) findViewById(R.id.btnCapturePicture);
         preview = (ImageView) findViewById(R.id.imgPreview);
@@ -66,117 +67,95 @@ public class BookPostActivity extends AppCompatActivity implements OnClickListen
         capturepicture.setOnClickListener(this);
     }
 
-    @Override
-    public void onClick(View view) {
+    private void validateData() {
         String name = bookname .getText().toString().trim();
         String author= authorname.getText().toString().trim();
-        String edition = edition.getText().toString().trim();
-        String cost = cost.getText().toString().trim();
-        if(name.isEmpty() && author.isEmpty()&& edition.isEmpty() && cost.isEmpty())
+        String edition = mEdition.getText().toString().trim();
+        String cost = mCost.getText().toString().trim();
+        boolean error = false;
+        if(TextUtils.isEmpty(name))
         {
-            registerBook(name,author,edition,cost);
+            error = true;
+            bookname.setError("Please enter the book name");
         }
 
-        else
+        if (TextUtils.isEmpty(author))
         {
-            Utils.showToast(this,"please enter your details");
+            error = true;
+            authorname.setError("Please enter the author name");
+        }
+
+        if (TextUtils.isEmpty(edition))
+        {
+            error = true;
+            authorname.setError("Please enter the mEdition");
+        }
+
+        if (TextUtils.isEmpty(cost))
+        {
+            error = true;
+            authorname.setError("Please enter the mCost");
+        }
+        File imageFile = null;
+        if (!TextUtils.isEmpty(mCurrentPhotoPath)) {
+            imageFile = new File(mCurrentPhotoPath);
+            if (imageFile == null || !imageFile.exists() || !(imageFile.length() > 0)) {
+                error = true;
+                Utils.showToast(this, "Please capture the image");
+            }
+        } else {
+            error = true;
+            Utils.showToast(this, "Please capture the image");
         }
 
 
+        if (error) {
+            Utils.showToast(this, "Please fill the required details");
+            submit.setEnabled(true);
+            return;
+        }
+
+
+        GetBooksInterface service = UsedbooksApplication.getInstance().getRetrofit().
+                create(GetBooksInterface.class);
+
+
+       // create part for file (photo)
+        MultipartBody.Part body = RetrofitUtils.prepareFilePart("image", Uri.fromFile(imageFile),
+                this);
+
+       // create a map of data to pass along
+        RequestBody nameBody = RetrofitUtils.createPartFromString(name);
+        RequestBody authorBody = RetrofitUtils.createPartFromString(author);
+        RequestBody costBody = RetrofitUtils.createPartFromString(cost);
+        RequestBody editionBody = RetrofitUtils.createPartFromString(edition);
+
+
+        HashMap<String, RequestBody> map = new HashMap<>();
+        map.put("name", nameBody);
+        map.put("cost", costBody);
+        map.put("authorname", authorBody);
+        map.put("edition", editionBody);
+
+        Call<Response> call = service.addBook(map, body);
+        call.enqueue(this);
+        submit.setText("Submitting.....");
+    }
+
+    @Override
+    public void onClick(View view) {
         switch (view.getId()) {
             case R.id.submit:
-                // perform save book operation
-
+                view.setEnabled(false);
+                validateData();
                 break;
 
             case R.id.btnCapturePicture:
                 dispatchTakePictureIntent();
-
                 break;
         }
     }
-public void registerBook( final String name,final String author,final String edition,final String cost)
-{
-    String tag_string_req = "req_addbook";
 
-
-
-
-    StringRequest strReq = new StringRequest(Method.POST,
-            AppConfig.URL_, new Response.Listener<String>() {
-
-        @Override
-        public void onResponse(String response) {
-            Log.d(TAG, "Register Response: " + response.toString());
-
-
-            try {
-                JSONObject jObj = new JSONObject(response);
-                boolean error = jObj.getBoolean("error");
-                if (!error) {
-                    // User successfully stored in MySQL
-                    // Now store the user in sqlite
-                    String uid = jObj.getString("uid");
-
-                    JSONObject books = jObj.getJSONObject("books");
-                    String name = books.getString("name");
-                    String author = books.getString("author");
-                    String edition= books.getString("edition");
-                    String cost = books.getString("cost");
-
-                    String created_at = books
-                            .getString("created_at");
-
-                    // Inserting row in users table
-                    db.addbooks(name, email, uid, created_at);
-
-
-                } else {
-
-                    // Error occurred in registration. Get the error
-                    // message
-                    String errorMsg = jObj.getString("error_msg");
-                    Toast.makeText(getApplicationContext(),
-                            errorMsg, Toast.LENGTH_LONG).show();
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-        }
-    }, new Response.ErrorListener() {
-
-        @Override
-        public void onErrorResponse(VolleyError error) {
-            Log.e(TAG, "Registration Error: " + error.getMessage());
-            Toast.makeText(getApplicationContext(),
-                    error.getMessage(), Toast.LENGTH_LONG).show();
-
-        }
-    }) {
-
-        @Override
-        protected Map<String, String> getParams() {
-            // Posting params to register url
-            Map<String, String> params = new HashMap<String, String>();
-            params.put("name", name);
-            params.put("email", email);
-            params.put("password", password);
-            params.put("phoneno", phone);
-            params.put("phoneno2",phone2);
-            params.put("address",address);
-            params.put("city",city);
-            params.put("state",state);
-            return params;
-        }
-
-    };
-
-    // Adding request to request queue
-    AppController.getInstance().addToRequestQueue(strReq, tag_string_req);
-}
-
-}
 
 
     private File createImageFile() throws IOException {
@@ -248,6 +227,40 @@ public void registerBook( final String name,final String author,final String edi
                 // failed to click
                 Utils.showToast(this, "Sorry! Failed to click");
             }
+        }
+    }
+
+    @Override
+    public void onResponse(Call<Response> call, retrofit2.Response<Response> response) {
+        if (Utils.isActivityAlive(this)) {
+            submit.setText("Success");
+            submit.setEnabled(true);
+            if (response.isSuccessful()) {
+                Response responseBody = response.body();
+                if (responseBody.getSuccess() == 1) {
+                    submit.setText("Success");
+                    Utils.showToast(BookPostActivity.this, "Success!" + responseBody.getMessage());
+                    Intent listIntent = new Intent(this, BooksListActivity.class);
+                    listIntent.setAction(BooksListActivity.RESTART_ACTION);
+                    startActivity(listIntent);
+                    finish();
+                } else {
+                    submit.setText("Submit");
+                    Utils.showToast(BookPostActivity.this, "Failed! " + responseBody.getMessage());
+                }
+            } else {
+                submit.setText("Submit");
+                Utils.showToast(BookPostActivity.this, "Something went wrong");
+            }
+        }
+    }
+
+    @Override
+    public void onFailure(Call<Response> call, Throwable t) {
+        if (Utils.isActivityAlive(this)) {
+            Utils.showToast(this, "Something went wrong while posting data");
+            submit.setEnabled(true);
+            submit.setText("Submit");
         }
     }
 }
