@@ -1,10 +1,14 @@
 package com.indira.usedbooks;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 
@@ -26,18 +30,31 @@ public class BooksListActivity extends AppCompatActivity implements Callback<Boo
     private ArrayList<Book> bookList = new ArrayList();
     private RecyclerView recyclerView;
     private BooksAdapter booksAdapter;
+    private ProgressBar mProgressBar;
+    private FloatingActionButton fab;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bookslist);
         recyclerView = (RecyclerView) findViewById(R.id.booklistview);
+        mProgressBar = (ProgressBar) findViewById(R.id.progress_bar);
         booksAdapter = new BooksAdapter(bookList ,this);
-        RecyclerView.LayoutManager layoutManager= new LinearLayoutManager(this);
+        fab = (FloatingActionButton) findViewById(R.id.fab);
+        RecyclerView.LayoutManager layoutManager= new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false);
         recyclerView.setLayoutManager(layoutManager);
-        recyclerView.addItemDecoration( new DividerItemDecoration(this,LinearLayoutManager.VERTICAL));
         recyclerView.setAdapter(booksAdapter);
+        mProgressBar.setVisibility(View.VISIBLE);
         prepareBookData();
+        fab.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View view){
+                Intent intent = new Intent(BooksListActivity.this,BookPostActivity.class);
+                startActivity(intent);
+            }
+
+        });
+
     }
 
     private void prepareBookData()
@@ -52,7 +69,10 @@ public class BooksListActivity extends AppCompatActivity implements Callback<Boo
         if (Utils.isActivityAlive(BooksListActivity.this)) {
             if (response.isSuccessful()) {
                 Books booksPresent = response.body();
-                bookList = booksPresent.books;
+                bookList.clear();
+                bookList.addAll(booksPresent.books);
+                mProgressBar.setVisibility(View.GONE);
+                recyclerView.setVisibility(View.VISIBLE);
                 booksAdapter.notifyDataSetChanged();
             } else {
                 Utils.showToast(BooksListActivity.this, "Something went wrong");
@@ -62,6 +82,8 @@ public class BooksListActivity extends AppCompatActivity implements Callback<Boo
 
     @Override
     public void onFailure(Call<Books> call, Throwable t) {
+        mProgressBar.setVisibility(View.GONE);
         Utils.showToast(BooksListActivity.this, "Something went wrong");
     }
+
 }
