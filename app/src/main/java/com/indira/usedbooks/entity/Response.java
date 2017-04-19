@@ -1,7 +1,7 @@
 package com.indira.usedbooks.entity;
 
 /**
- * Created by jotishsuthar on 10/04/17.
+ * Created by indusuthar on 10/04/17.
  */
 
 public class Response {
