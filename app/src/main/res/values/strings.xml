@@ -33,4 +33,5 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."</string>
     <string name="addbooks">Add Book</string>
+    <string name="adduser"> Add User</string>
 </resources>

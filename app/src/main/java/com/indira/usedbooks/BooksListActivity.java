@@ -8,6 +8,7 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -26,13 +27,14 @@ import retrofit2.Response;
  * Created by Manish on 08-04-2017.
  */
 
-public class BooksListActivity extends AppCompatActivity implements Callback<Books> {
+public class BooksListActivity extends AppCompatActivity implements Callback<Books>  {
     private ArrayList<Book> bookList = new ArrayList();
     private RecyclerView recyclerView;
     private BooksAdapter booksAdapter;
     private ProgressBar mProgressBar;
     private FloatingActionButton fab;
     public static String RESTART_ACTION = "restart_action";
+    private Button register;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -42,6 +44,7 @@ public class BooksListActivity extends AppCompatActivity implements Callback<Boo
         mProgressBar = (ProgressBar) findViewById(R.id.progress_bar);
         booksAdapter = new BooksAdapter(bookList ,this);
         fab = (FloatingActionButton) findViewById(R.id.fab);
+        register = (Button) findViewById(R.id.btnRegister);
         RecyclerView.LayoutManager layoutManager= new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(booksAdapter);
@@ -51,6 +54,15 @@ public class BooksListActivity extends AppCompatActivity implements Callback<Boo
         {
             public void onClick(View view){
                 Intent intent = new Intent(BooksListActivity.this,BookPostActivity.class);
+                startActivity(intent);
+            }
+
+        });
+
+        register.setOnClickListener(new View.OnClickListener()
+        {
+            public void onClick(View view){
+                Intent intent = new Intent(getApplicationContext(),RegisterActivity.class);
                 startActivity(intent);
             }
 
