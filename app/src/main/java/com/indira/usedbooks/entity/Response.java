@@ -8,6 +8,7 @@ public class Response {
 
     private int success;
     private String message;
+    private User user;
 
     public int getSuccess() {
         return success;
@@ -23,5 +24,9 @@ public class Response {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public User getUser() {
+        return user;
     }
 }
