@@ -4,6 +4,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -46,6 +49,8 @@ public class RegisterActivity extends AppCompatActivity implements OnClickListen
         inputCity = (EditText) findViewById(R.id.city);
         inputState =(EditText) findViewById(R.id.state);
         btnRegister = (Button) findViewById(R.id.btnRegister);
+        btnLinkToLogin = (Button) findViewById(R.id.btnLogin);
+        btnLinkToLogin.setOnClickListener(this);
         btnRegister.setOnClickListener(this);}
 
         private void validatedata() {
@@ -122,6 +127,8 @@ public class RegisterActivity extends AppCompatActivity implements OnClickListen
             case R.id.btnRegister:
                 validatedata();
                 break;
+            case R.id.btnLogin:
+                startActivity(new Intent(this, LoginActivity.class));
         }
     }
 
@@ -161,5 +168,22 @@ public class RegisterActivity extends AppCompatActivity implements OnClickListen
                   btnRegister.setText("Submit");
           }
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(final Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_sign_in, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(final MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.sign_in:
+                startActivity(new Intent(this, LoginActivity.class));
+                finish();
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

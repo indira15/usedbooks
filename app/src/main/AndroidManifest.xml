@@ -28,9 +28,10 @@
         </activity>
         <activity android:name=".BookPostActivity"
             android:label="@string/addbooks"></activity>
-
+        <activity android:name=".LoginActivity"
+          android:label="@string/btn_login"></activity>
         <activity android:name=".RegisterActivity"
-            android:label="@string/adduser"></activity>
+            android:label="@string/btn_register"></activity>
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="com.indira.usedbooks.android.fileprovider"

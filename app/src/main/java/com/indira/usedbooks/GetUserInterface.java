@@ -22,12 +22,11 @@ import retrofit2.http.Path;
 
 public interface GetUserInterface {
 
-    //@GET("login.php")
-    //Call<User> getUser();
 
-
-    //@GET("login.php")
-   // Call<User> getUser(@Field("email") String email, @Field("password") String password);
+    @POST("login.php")
+    @FormUrlEncoded
+    Call<Response> loginUser(@Field("email") String email,
+        @Field("password") String password);
 
 
     @POST("register.php")
