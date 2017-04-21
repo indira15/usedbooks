@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.view.View.OnClickListener;
 
 import com.indira.usedbooks.entity.Response;
+import com.indira.usedbooks.entity.User;
 
 import java.util.HashMap;
 
@@ -54,7 +55,7 @@ public class RegisterActivity extends AppCompatActivity implements OnClickListen
         btnRegister.setOnClickListener(this);}
 
         private void validatedata() {
-            String username = inputFullName.getText().toString().trim();
+            String name = inputFullName.getText().toString().trim();
             String email = inputEmail.getText().toString().trim();
             String password = inputPassword.getText().toString().trim();
             String phoneno = inputPhoneno.getText().toString().trim();
@@ -64,7 +65,7 @@ public class RegisterActivity extends AppCompatActivity implements OnClickListen
             String state = inputState.getText().toString().trim();
 
             boolean error = false;
-            if (TextUtils.isEmpty(username)) {
+            if (TextUtils.isEmpty(name)) {
                 error = true;
                 inputFullName.setError("Please enter the Full Name");
             }
@@ -114,35 +115,25 @@ public class RegisterActivity extends AppCompatActivity implements OnClickListen
             GetUserInterface service = UsedbooksApplication.getInstance().getRetrofit().
                     create(GetUserInterface.class);
 
-            RequestBody usernameBody = RetrofitUtils.createPartFromString(username);
-            RequestBody emailBody = RetrofitUtils.createPartFromString(email);
-            RequestBody passwordBody = RetrofitUtils.createPartFromString(password);
-            RequestBody phonenoBody = RetrofitUtils.createPartFromString(phoneno);
-            RequestBody phoneno2Body = RetrofitUtils.createPartFromString(phoneno2);
-            RequestBody addressBody = RetrofitUtils.createPartFromString(address);
-            RequestBody cityBody = RetrofitUtils.createPartFromString(city);
-            RequestBody stateBody = RetrofitUtils.createPartFromString(state);
 
 
-            HashMap<String, RequestBody> map = new HashMap<>();
-            map.put("name", usernameBody);
-            map.put("email", emailBody);
-            map.put("password", passwordBody);
-            map.put("phoneno", phonenoBody);
-            map.put("phoneno2", phoneno2Body);
-            map.put("address", addressBody);
-            map.put("city", cityBody);
-            map.put("state", stateBody);
-
-
-            Call<Response> call = service.addUser(map);
-            call.enqueue(this);
+            Call<Response> cn = service.addUser(name,email,password,phoneno,phoneno2,address,city,state);
+            cn.enqueue(this);
             btnRegister.setText("Submitting.....");
 
 }
     @Override
     public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.btnRegister:
+                view.setEnabled(false);
+                validatedata();
+                break;
 
+            case R.id.btnLinkToLoginScreen:
+
+                break;
+        }
     }
 
     @Override

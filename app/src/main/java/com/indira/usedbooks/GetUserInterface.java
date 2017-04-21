@@ -1,16 +1,17 @@
 package com.indira.usedbooks;
 
+//import com.indira.usedbooks.entity.Response;
 import com.indira.usedbooks.entity.Response;
 import com.indira.usedbooks.entity.User;
 
-import java.util.Map;
+//import java.util.Map;
 
 
-import okhttp3.RequestBody;
+//import okhttp3.RequestBody;
 import retrofit2.Call;
-import retrofit2.http.GET;
+//import retrofit2.http.GET;
 import retrofit2.http.POST;
-import retrofit2.http.PartMap;
+import retrofit2.http.Path;
 
 
 /**
@@ -19,13 +20,16 @@ import retrofit2.http.PartMap;
 
 public interface GetUserInterface {
 
-    @GET("login.php")
-    Call<User> getUser();
+    //@GET("login.php")
+    //Call<User> getUser();
+
+
+    //@GET("login.php")
+   // Call<User> getUser(@Path("email") String email, @Path("password") String password);
 
 
     @POST("register.php")
-    Call<Response> addUser(
-            @PartMap() Map<String, RequestBody> partMap);
+    Call<Response> addUser(@Path("name") String name, @Path("email") String email, @Path("password") String password, @Path("phoneno") String phoneno, @Path("phoneno2") String phoneno2, @Path("address") String address, @Path("city") String city, @Path("state") String state);
 }
 
 
