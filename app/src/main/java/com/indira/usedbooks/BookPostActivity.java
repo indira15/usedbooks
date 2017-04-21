@@ -1,13 +1,23 @@
 package com.indira.usedbooks;
 
+import android.Manifest;
+import android.Manifest.permission;
+import android.annotation.TargetApi;
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
+import android.os.Build;
+import android.os.Build.VERSION_CODES;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
@@ -51,6 +61,7 @@ public class BookPostActivity extends AppCompatActivity implements OnClickListen
     private ImageView preview;
     static final int REQUEST_TAKE_PHOTO = 1;
     private String mCurrentPhotoPath;
+    public final int REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS = 1;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -129,13 +140,15 @@ public class BookPostActivity extends AppCompatActivity implements OnClickListen
         RequestBody authorBody = RetrofitUtils.createPartFromString(author);
         RequestBody costBody = RetrofitUtils.createPartFromString(cost);
         RequestBody editionBody = RetrofitUtils.createPartFromString(edition);
-
+        RequestBody userIdBody = RetrofitUtils.createPartFromString(String.valueOf(PreferenceUtils.
+            getIntegerPrefs(this, PreferenceUtils.SAVED_USER_ID)));
 
         HashMap<String, RequestBody> map = new HashMap<>();
         map.put("name", nameBody);
         map.put("cost", costBody);
         map.put("authorname", authorBody);
         map.put("edition", editionBody);
+        map.put("user_id", userIdBody);
 
         Call<Response> call = service.addBook(map, body);
         call.enqueue(this);
@@ -151,7 +164,15 @@ public class BookPostActivity extends AppCompatActivity implements OnClickListen
                 break;
 
             case R.id.btnCapturePicture:
-                dispatchTakePictureIntent();
+                if(hasPermissions(this,  new String[]{Manifest.permission.CAMERA,
+                    permission.READ_EXTERNAL_STORAGE,
+                    permission.WRITE_EXTERNAL_STORAGE})) {
+                    dispatchTakePictureIntent();
+                } else {
+                    if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M ) {
+                        checkMultiplePermissions(REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS,this);
+                    }
+                }
                 break;
         }
     }
@@ -173,6 +194,55 @@ public class BookPostActivity extends AppCompatActivity implements OnClickListen
         // Save a file: path for use with ACTION_VIEW intents
         mCurrentPhotoPath = image.getAbsolutePath();
         return image;
+    }
+
+    @TargetApi(Build.VERSION_CODES.M)
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS:
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED
+                    && grantResults[1] == PackageManager.PERMISSION_GRANTED
+                    && grantResults[2] == PackageManager.PERMISSION_GRANTED) {
+                    dispatchTakePictureIntent();
+                } else {
+                    boolean showRationale1 = shouldShowRequestPermissionRationale(
+                        permission.CAMERA);
+                    boolean showRationale2 = shouldShowRequestPermissionRationale(
+                        permission.READ_EXTERNAL_STORAGE
+                    );
+                    boolean showRationale3 = shouldShowRequestPermissionRationale(
+                        permission.WRITE_EXTERNAL_STORAGE
+                    );
+                }
+                break;
+            default:
+                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+    }
+
+    //check for camera and storage access permissions
+    @TargetApi(Build.VERSION_CODES.M)
+    private void checkMultiplePermissions(int permissionCode, Context context) {
+        String[] PERMISSIONS = {Manifest.permission.CAMERA,
+            permission.READ_EXTERNAL_STORAGE,
+            permission.WRITE_EXTERNAL_STORAGE};
+        if (!hasPermissions(context, PERMISSIONS)) {
+            ActivityCompat.requestPermissions((Activity) context, PERMISSIONS, permissionCode);
+        } else {
+            dispatchTakePictureIntent();
+        }
+    }
+
+    private boolean hasPermissions(Context context, String... permissions) {
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && context != null && permissions != null) {
+            for (String permission : permissions) {
+                if (ActivityCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     private void dispatchTakePictureIntent() {

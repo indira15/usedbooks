@@ -37,9 +37,11 @@ public class BooksAdapter extends RecyclerView.Adapter<BookViewHolder> {
         Book book = mBookList.get(position);
         holder.nameView.setText(book.getName());
         holder.costView.setText(String.valueOf(book.getCost()));
+        holder.userNameView.setText(" by " + book.getUser().getName());
         if (!TextUtils.isEmpty(book.getImageUrl())) {
             Picasso.with(mContext).load(book.getImageUrl())
                     .placeholder(R.drawable.ic_launcher)
+                    .resize(80, 80)
                     .into(holder.imageView);
         }
     }

@@ -12,6 +12,7 @@ import android.widget.TextView;
 public class BookViewHolder extends RecyclerView.ViewHolder {
     public TextView nameView;
     public TextView costView;
+    public TextView userNameView;
     public ImageView imageView;
 
     public BookViewHolder(View itemView) {
@@ -19,6 +20,7 @@ public class BookViewHolder extends RecyclerView.ViewHolder {
         nameView = (TextView) itemView.findViewById(R.id.book_name);
         costView = (TextView) itemView.findViewById(R.id.cost);
         imageView = (ImageView) itemView.findViewById(R.id.book_image);
+        userNameView = (TextView) itemView.findViewById(R.id.userName);
 
     }
 }

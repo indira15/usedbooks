@@ -5,6 +5,7 @@
     <dimen name="book_image_size">80dp</dimen>
     <dimen name="book_title_size">18sp</dimen>
     <dimen name="book_cost_size">12sp</dimen>
+    <dimen name="username_size">14sp</dimen>
     <dimen name="padding_medium">8dp</dimen>
     <dimen name="margin_medium">8dp</dimen>
     <dimen name="progress_bar_size">50dp</dimen>
