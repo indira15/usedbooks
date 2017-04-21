@@ -7,6 +7,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -34,7 +37,6 @@ public class BooksListActivity extends AppCompatActivity implements Callback<Boo
     private ProgressBar mProgressBar;
     private FloatingActionButton fab;
     public static String RESTART_ACTION = "restart_action";
-    private Button register;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -44,7 +46,6 @@ public class BooksListActivity extends AppCompatActivity implements Callback<Boo
         mProgressBar = (ProgressBar) findViewById(R.id.progress_bar);
         booksAdapter = new BooksAdapter(bookList ,this);
         fab = (FloatingActionButton) findViewById(R.id.fab);
-        register = (Button) findViewById(R.id.btnRegister);
         RecyclerView.LayoutManager layoutManager= new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(booksAdapter);
@@ -58,16 +59,6 @@ public class BooksListActivity extends AppCompatActivity implements Callback<Boo
             }
 
         });
-
-        register.setOnClickListener(new View.OnClickListener()
-        {
-            public void onClick(View view){
-                Intent intent = new Intent(getApplicationContext(),RegisterActivity.class);
-                startActivity(intent);
-            }
-
-        });
-
     }
 
     private void prepareBookData()
@@ -110,5 +101,22 @@ public class BooksListActivity extends AppCompatActivity implements Callback<Boo
                 prepareBookData();
             }
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(final Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_books_list, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(final MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.register:
+                startActivity(new Intent(this, RegisterActivity.class));
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

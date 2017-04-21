@@ -142,6 +142,11 @@ public class RegisterActivity extends AppCompatActivity implements OnClickListen
 }
     @Override
     public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.btnRegister:
+                validatedata();
+                break;
+        }
 
     }
 
