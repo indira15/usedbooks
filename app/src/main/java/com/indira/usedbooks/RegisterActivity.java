@@ -1,6 +1,5 @@
 package com.indira.usedbooks;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -11,12 +10,8 @@ import android.widget.EditText;
 import android.view.View.OnClickListener;
 
 import com.indira.usedbooks.entity.Response;
-import com.indira.usedbooks.entity.User;
-
-import java.util.HashMap;
 
 import retrofit2.Callback;
-import okhttp3.RequestBody;
 import retrofit2.Call;
 
 
@@ -51,7 +46,6 @@ public class RegisterActivity extends AppCompatActivity implements OnClickListen
         inputCity = (EditText) findViewById(R.id.city);
         inputState =(EditText) findViewById(R.id.state);
         btnRegister = (Button) findViewById(R.id.btnRegister);
-        btnLinkToLogin = (Button) findViewById(R.id.btnLinkToLoginScreen);
         btnRegister.setOnClickListener(this);}
 
         private void validatedata() {
@@ -128,9 +122,6 @@ public class RegisterActivity extends AppCompatActivity implements OnClickListen
             case R.id.btnRegister:
                 validatedata();
                 break;
-            case R.id.btnLinkToLoginScreen:
-
-                break;
         }
     }
 
@@ -143,6 +134,10 @@ public class RegisterActivity extends AppCompatActivity implements OnClickListen
                 Response responseBody = response.body();
                 if (responseBody.getSuccess() == 1) {
                     btnRegister.setText("Success");
+                    PreferenceUtils.set(getApplicationContext(), PreferenceUtils.SAVED_USER_NAME,
+                        responseBody.getUser().getName());
+                    PreferenceUtils.set(getApplicationContext(), PreferenceUtils.SAVED_USER_ID,
+                        responseBody.getUser().getId());
                     Utils.showToast(RegisterActivity.this, "Success!" + responseBody.getMessage());
                     Intent listIntent = new Intent(this, BooksListActivity.class);
                     listIntent.setAction(BooksListActivity.RESTART_ACTION);

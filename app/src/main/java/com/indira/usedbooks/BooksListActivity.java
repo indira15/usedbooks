@@ -54,8 +54,12 @@ public class BooksListActivity extends AppCompatActivity implements Callback<Boo
         fab.setOnClickListener(new View.OnClickListener()
         {
             public void onClick(View view){
-                Intent intent = new Intent(BooksListActivity.this,BookPostActivity.class);
-                startActivity(intent);
+                if (PreferenceUtils.isLoggedIn(BooksListActivity.this)) {
+                    Intent intent = new Intent(BooksListActivity.this, BookPostActivity.class);
+                    startActivity(intent);
+                } else {
+                    Utils.showToast(BooksListActivity.this, "Please register to add a book");
+                }
             }
 
         });
@@ -107,6 +111,11 @@ public class BooksListActivity extends AppCompatActivity implements Callback<Boo
     public boolean onCreateOptionsMenu(final Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_books_list, menu);
+        if (PreferenceUtils.isLoggedIn(this)) {
+            MenuItem registerItem  = menu.findItem(R.id.register);
+            registerItem.setTitle(PreferenceUtils.getStringPrefs(this, PreferenceUtils
+                .SAVED_USER_NAME));
+        }
         return true;
     }
 
@@ -114,7 +123,12 @@ public class BooksListActivity extends AppCompatActivity implements Callback<Boo
     public boolean onOptionsItemSelected(final MenuItem item) {
         switch (item.getItemId()) {
             case R.id.register:
-                startActivity(new Intent(this, RegisterActivity.class));
+                if (!PreferenceUtils.isLoggedIn(this)) {
+                    startActivity(new Intent(this, RegisterActivity.class));
+                } else {
+                    Utils.showToast(this, "Hello "+ PreferenceUtils.getStringPrefs(this,
+                        PreferenceUtils.SAVED_USER_NAME));
+                }
                 break;
         }
         return super.onOptionsItemSelected(item);
