@@ -35,7 +35,9 @@ public class ContactActivity extends AppCompatActivity implements Callback<Respo
     TextView bookName;
     ImageView bookImage;
     Button notifyOwner;
-
+    View requesterView;
+    TextView requestText;
+    TextView requestContact;
 
 
     public void onCreate(Bundle savedInstanceState) {
@@ -52,7 +54,9 @@ public class ContactActivity extends AppCompatActivity implements Callback<Respo
         authorName = (TextView)findViewById(R.id.author_name);
         bookImage = (ImageView) findViewById(R.id.book_image);
         notifyOwner = (Button) findViewById(R.id.notifyOwner);
-
+        requesterView = findViewById(R.id.requesterDetails);
+        requestText = (TextView) findViewById(R.id.requestText);
+        requestContact = (TextView) findViewById(R.id.contactText);
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
@@ -83,6 +87,14 @@ public class ContactActivity extends AppCompatActivity implements Callback<Respo
                     cn.enqueue(ContactActivity.this);
                 }
             });
+            if (extras.containsKey("requester")) {
+                User requester = (User) extras.getSerializable("requester");
+                requesterView.setVisibility(View.VISIBLE);
+                requestText.setText("User - " + requester.getName() + " is interested in buying "
+                    + "the book");
+                requestContact.setText("Contact the user on " + requester.getPhoneno());
+                notifyOwner.setVisibility(View.GONE);
+            }
         }
 
     }

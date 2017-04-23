@@ -2,7 +2,9 @@ package com.indira.usedbooks;
 
 import android.app.Activity;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -24,7 +26,7 @@ public class Utils {
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
     }
 
-    public static void showNotification(Context context, String text) {
+    public static void showNotification(Context context, String text, PendingIntent intent) {
         NotificationCompat.Builder mBuilder =
             new NotificationCompat.Builder(context)
                 .setSmallIcon(R.drawable.ic_launcher)
@@ -35,6 +37,8 @@ public class Utils {
         inboxStyle.setBigContentTitle("User interested in your book!!");
         inboxStyle.addLine(text);
         mBuilder.setStyle(inboxStyle);
+        mBuilder.setContentIntent(intent);
+        mBuilder.setAutoCancel(true);
         NotificationManager mNotificationManager =
             (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
        mNotificationManager.notify((new Random()).nextInt(), mBuilder.build());
