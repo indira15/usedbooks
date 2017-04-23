@@ -1,10 +1,12 @@
 package com.indira.usedbooks.entity;
 
+import java.io.Serializable;
+
 /**
  * Created by Manish on 08-04-2017.
  */
 
-public class User {
+public class User implements Serializable{
     private int id;
     private String name;
     private String email;

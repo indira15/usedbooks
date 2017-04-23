@@ -1,5 +1,6 @@
 package com.indira.usedbooks;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
@@ -52,6 +53,7 @@ public class BooksAdapter extends RecyclerView.Adapter<BookViewHolder> {
             public void onClick(final View view) {
                 Intent contactIntent = new Intent(mContext, ContactActivity.class);
                 contactIntent.putExtra("book", book);
+                mContext.startActivity(contactIntent);
             }
         });
     }
