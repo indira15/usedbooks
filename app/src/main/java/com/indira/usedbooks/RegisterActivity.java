@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.view.View.OnClickListener;
 
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.indira.usedbooks.entity.Response;
 
 import retrofit2.Callback;
@@ -146,6 +147,8 @@ public class RegisterActivity extends AppCompatActivity implements OnClickListen
                         responseBody.getUser().getName());
                     PreferenceUtils.set(getApplicationContext(), PreferenceUtils.SAVED_USER_ID,
                         responseBody.getUser().getId());
+                    FirebaseMessaging.getInstance().subscribeToTopic("usedbooks_" + responseBody
+                        .getUser().getId());
                     Utils.showToast(RegisterActivity.this, "Success!" + responseBody.getMessage());
                     Intent listIntent = new Intent(this, BooksListActivity.class);
                     listIntent.setAction(BooksListActivity.RESTART_ACTION);

@@ -3,17 +3,22 @@ package com.indira.usedbooks;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.indira.usedbooks.entity.Book;
+import com.indira.usedbooks.entity.Response;
 import com.indira.usedbooks.entity.User;
 import com.squareup.picasso.Picasso;
+import retrofit2.Call;
+import retrofit2.Callback;
 
 /**
  * Created by Manish on 23-04-2017.
  */
 
-public class ContactActivity extends AppCompatActivity implements View.OnClickListener {
+public class ContactActivity extends AppCompatActivity implements Callback<Response> {
 
     TextView usernameView;
 
@@ -29,6 +34,7 @@ public class ContactActivity extends AppCompatActivity implements View.OnClickLi
 
     TextView bookName;
     ImageView bookImage;
+    Button notifyOwner;
 
 
 
@@ -45,11 +51,12 @@ public class ContactActivity extends AppCompatActivity implements View.OnClickLi
         userCity = (TextView) findViewById(R.id.city);
         authorName = (TextView)findViewById(R.id.author_name);
         bookImage = (ImageView) findViewById(R.id.book_image);
+        notifyOwner = (Button) findViewById(R.id.notifyOwner);
 
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            Book book = (Book) extras.getSerializable("book");
+            final Book book = (Book) extras.getSerializable("book");
             User user = book.getUser();
             usernameView.setText(user.getName());
             bookName.setText(book.getName());
@@ -64,15 +71,48 @@ public class ContactActivity extends AppCompatActivity implements View.OnClickLi
                 .placeholder(R.drawable.ic_launcher)
                 .resize(100, 100)
                 .into(bookImage);
+            notifyOwner.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(final View view) {
+                    notifyOwner.setEnabled(false);
+                    notifyOwner.setText("Notifying...");
+                    GetUserInterface service = UsedbooksApplication.getInstance().getRetrofit().
+                        create(GetUserInterface.class);
+                    Call<Response> cn = service.notifyOwner(book.getId(),
+                        PreferenceUtils.getIntegerPrefs(ContactActivity.this, PreferenceUtils.SAVED_USER_ID));
+                    cn.enqueue(ContactActivity.this);
+                }
+            });
         }
 
     }
 
 
-
+    @Override
+    public void onResponse(final Call<Response> call, final retrofit2.Response<Response> response) {
+        if (Utils.isActivityAlive(this)) {
+            notifyOwner.setEnabled(true);
+            if (response.isSuccessful()) {
+                Response responseBody = response.body();
+                if (responseBody.getSuccess() == 1) {
+                    notifyOwner.setText("Notified");
+                } else {
+                    notifyOwner.setText("Notify Owner");
+                    Utils.showToast(this, "Failed! " + responseBody.getMessage());
+                }
+            } else {
+                notifyOwner.setText("Notify Owner");
+                Utils.showToast(this, "Something went wrong");
+            }
+        }
+    }
 
     @Override
-    public void onClick(View view) {
-
+    public void onFailure(final Call<Response> call, final Throwable t) {
+        if (Utils.isActivityAlive(this)) {
+            Utils.showToast(this, "Something went wrong while posting data");
+            notifyOwner.setEnabled(true);
+            notifyOwner.setText("Notify Owner");
+        }
     }
 }
