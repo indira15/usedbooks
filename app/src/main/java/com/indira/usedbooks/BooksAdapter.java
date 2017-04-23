@@ -11,7 +11,6 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 
 import com.indira.usedbooks.entity.Book;
-import com.indira.usedbooks.entity.User;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -24,12 +23,10 @@ public class BooksAdapter extends RecyclerView.Adapter<BookViewHolder> {
 
     private ArrayList<Book> mBookList;
     private Context mContext;
-    private ArrayList<User> mUserList;
 
-    public BooksAdapter(ArrayList<Book> bookList, Context context,ArrayList<User> userList) {
+    public BooksAdapter(ArrayList<Book> bookList, Context context) {
         this.mBookList = bookList;
         this.mContext = context;
-        this.mUserList = userList;
     }
 
     @Override
@@ -41,11 +38,9 @@ public class BooksAdapter extends RecyclerView.Adapter<BookViewHolder> {
     @Override
     public void onBindViewHolder(BookViewHolder holder, int position) {
         final Book book = mBookList.get(position);
-        final User user = mUserList.get(position);
         holder.nameView.setText(book.getName());
         holder.costView.setText(String.valueOf(book.getCost()));
         holder.userNameView.setText(" by " + book.getUser().getName());
-
 
         if (!TextUtils.isEmpty(book.getImageUrl())) {
             Picasso.with(mContext).load(book.getImageUrl())
@@ -58,7 +53,6 @@ public class BooksAdapter extends RecyclerView.Adapter<BookViewHolder> {
             public void onClick(final View view) {
                 Intent contactIntent = new Intent(mContext, ContactActivity.class);
                 contactIntent.putExtra("book", book);
-                contactIntent.putExtra("user", user );
                 mContext.startActivity(contactIntent);
             }
         });

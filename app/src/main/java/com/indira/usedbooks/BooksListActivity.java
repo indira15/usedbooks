@@ -19,7 +19,6 @@ import android.widget.Toast;
 
 import com.indira.usedbooks.entity.Book;
 import com.indira.usedbooks.entity.Books;
-import com.indira.usedbooks.entity.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +33,6 @@ import retrofit2.Response;
 
 public class BooksListActivity extends AppCompatActivity  implements Callback<Books>   {
     private ArrayList<Book> bookList = new ArrayList();
-    private ArrayList<User> userList = new ArrayList();
     private RecyclerView recyclerView;
     private BooksAdapter booksAdapter;
     private ProgressBar mProgressBar;
@@ -48,7 +46,7 @@ public class BooksListActivity extends AppCompatActivity  implements Callback<Bo
         setContentView(R.layout.activity_bookslist);
         recyclerView = (RecyclerView) findViewById(R.id.booklistview);
         mProgressBar = (ProgressBar) findViewById(R.id.progress_bar);
-        booksAdapter = new BooksAdapter(bookList,this,userList);
+        booksAdapter = new BooksAdapter(bookList ,this);
 
         fab = (FloatingActionButton) findViewById(R.id.fab);
         RecyclerView.LayoutManager layoutManager= new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false);
