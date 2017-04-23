@@ -1,12 +1,15 @@
 package com.indira.usedbooks.entity;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * Created by Manish on 08-04-2017.
  */
 
-public class Book {
+public class Book implements Serializable {
 
     private int id;
     private String name;
@@ -24,7 +27,7 @@ public class Book {
 
     private String imageUrl;
 
-    public static User getUser() {
+    public User getUser() {
         return user;
     }
 
@@ -74,6 +77,5 @@ public class Book {
     public double getCost() {
         return cost;
     }
-
 
 }

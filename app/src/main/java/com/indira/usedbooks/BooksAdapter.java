@@ -1,10 +1,12 @@
 package com.indira.usedbooks;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 
 import com.indira.usedbooks.entity.Book;
@@ -34,7 +36,7 @@ public class BooksAdapter extends RecyclerView.Adapter<BookViewHolder> {
 
     @Override
     public void onBindViewHolder(BookViewHolder holder, int position) {
-        Book book = mBookList.get(position);
+        final Book book = mBookList.get(position);
         holder.nameView.setText(book.getName());
         holder.costView.setText(String.valueOf(book.getCost()));
         holder.userNameView.setText(" by " + book.getUser().getName());
@@ -45,6 +47,13 @@ public class BooksAdapter extends RecyclerView.Adapter<BookViewHolder> {
                     .resize(80, 80)
                     .into(holder.imageView);
         }
+        holder.item.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(final View view) {
+                Intent contactIntent = new Intent(mContext, ContactActivity.class);
+                contactIntent.putExtra("book", book);
+            }
+        });
     }
 
     @Override

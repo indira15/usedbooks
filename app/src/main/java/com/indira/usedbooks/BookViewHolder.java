@@ -14,6 +14,7 @@ public class BookViewHolder extends RecyclerView.ViewHolder {
     public TextView costView;
     public TextView userNameView;
     public ImageView imageView;
+    public View item;
 
     public BookViewHolder(View itemView) {
         super(itemView);
@@ -21,6 +22,6 @@ public class BookViewHolder extends RecyclerView.ViewHolder {
         costView = (TextView) itemView.findViewById(R.id.cost);
         imageView = (ImageView) itemView.findViewById(R.id.book_image);
         userNameView = (TextView) itemView.findViewById(R.id.userName);
-
+        item = itemView;
     }
 }
