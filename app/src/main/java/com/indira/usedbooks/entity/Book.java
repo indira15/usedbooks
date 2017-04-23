@@ -24,7 +24,7 @@ public class Book {
 
     private String imageUrl;
 
-    public User getUser() {
+    public static User getUser() {
         return user;
     }
 

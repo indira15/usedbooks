@@ -2,6 +2,7 @@ package com.indira.usedbooks;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
@@ -30,13 +31,14 @@ import retrofit2.Response;
  * Created by Manish on 08-04-2017.
  */
 
-public class BooksListActivity extends AppCompatActivity implements Callback<Books>  {
+public class BooksListActivity extends AppCompatActivity  implements Callback<Books>   {
     private ArrayList<Book> bookList = new ArrayList();
     private RecyclerView recyclerView;
     private BooksAdapter booksAdapter;
     private ProgressBar mProgressBar;
     private FloatingActionButton fab;
     public static String RESTART_ACTION = "restart_action";
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -45,6 +47,7 @@ public class BooksListActivity extends AppCompatActivity implements Callback<Boo
         recyclerView = (RecyclerView) findViewById(R.id.booklistview);
         mProgressBar = (ProgressBar) findViewById(R.id.progress_bar);
         booksAdapter = new BooksAdapter(bookList ,this);
+
         fab = (FloatingActionButton) findViewById(R.id.fab);
         RecyclerView.LayoutManager layoutManager= new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false);
         recyclerView.setLayoutManager(layoutManager);
@@ -63,6 +66,8 @@ public class BooksListActivity extends AppCompatActivity implements Callback<Boo
             }
 
         });
+
+
     }
 
     private void prepareBookData()

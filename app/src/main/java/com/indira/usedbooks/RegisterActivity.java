@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Patterns;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -74,12 +75,12 @@ public class RegisterActivity extends AppCompatActivity implements OnClickListen
                 inputPassword.setError("Pleases enter the password");
             }
 
-            if (TextUtils.isEmpty(email)) {
+            if (TextUtils.isEmpty(email) || !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
                 error = true;
-                inputEmail.setError("Please enter the Email Id");
+                inputEmail.setError("Please enter the valid Email Id");
             }
 
-            if (TextUtils.isEmpty(phoneno)) {
+            if (TextUtils.isEmpty(phoneno) || !Patterns.PHONE.matcher(phoneno).matches()) {
                 error = true;
                 inputPhoneno.setError("Please enter the Phone number");
             }

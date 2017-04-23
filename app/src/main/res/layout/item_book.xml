@@ -44,12 +44,12 @@
                     android:textSize="@dimen/book_cost_size"
                     android:textStyle="bold" />
                 <TextView
-                  android:id="@+id/userName"
-                  android:layout_width="wrap_content"
-                  android:layout_height="wrap_content"
-                  android:layout_marginLeft="@dimen/margin_medium"
-                  android:textSize="@dimen/username_size"
-                  android:textStyle="bold" />
+                    android:id="@+id/userName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/margin_medium"
+                    android:textSize="@dimen/username_size"
+                    android:textStyle="bold" />
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
