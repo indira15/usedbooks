@@ -1,9 +1,7 @@
 package com.indira.usedbooks.entity;
 
-import android.os.Parcel;
-import android.os.Parcelable;
+
 import java.io.Serializable;
-import java.util.ArrayList;
 
 /**
  * Created by Manish on 08-04-2017.
