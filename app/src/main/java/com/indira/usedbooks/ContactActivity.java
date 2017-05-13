@@ -1,7 +1,11 @@
 package com.indira.usedbooks;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -23,6 +27,7 @@ public class ContactActivity extends AppCompatActivity implements Callback<Respo
     TextView usernameView;
 
     TextView userContact;
+    TextView userContact02;
     TextView userAddress;
     TextView userCity;
     TextView userState;
@@ -48,6 +53,7 @@ public class ContactActivity extends AppCompatActivity implements Callback<Respo
         bookName= (TextView) findViewById(R.id.book_name);
         edition = (TextView) findViewById(R.id.edition);
         userContact = (TextView) findViewById(R.id.userContact);
+        userContact02 = (TextView) findViewById(R.id.userContact02);
         userAddress= (TextView) findViewById(R.id.address);
         userState = (TextView) findViewById(R.id.state);
         userCity = (TextView) findViewById(R.id.city);
@@ -58,19 +64,21 @@ public class ContactActivity extends AppCompatActivity implements Callback<Respo
         requestText = (TextView) findViewById(R.id.requestText);
         requestContact = (TextView) findViewById(R.id.contactText);
 
+
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             final Book book = (Book) extras.getSerializable("book");
             User user = book.getUser();
-            usernameView.setText(user.getName());
-            bookName.setText(book.getName());
-            authorName.setText(book.getAuthorName());
-            bookCost.setText(String.valueOf(book.getCost()));
-            edition.setText(book.getEdition());
-            userState.setText(user.getState());
-            userAddress.setText(user.getAddress());
-            userCity.setText(user.getCity());
-            userContact.setText(user.getPhoneno());
+            usernameView.setText("Posted By:"+user.getName());
+            bookName.setText("Book Name:"+book.getName());
+            authorName.setText("Author Name :" +book.getAuthorName());
+            bookCost.setText("Rs:"+String.valueOf(book.getCost()));
+            edition.setText("Edition :"+book.getEdition());
+            userState.setText("State :"+user.getState());
+            userAddress.setText("Address :"+user.getAddress());
+            userCity.setText("City :"+user.getCity());
+            userContact.setText("Phone No:"+ user.getPhoneno());
+            userContact02.setText("Phone No2:"+user.getPhoneno2());
             Picasso.with(this).load(book.getImageUrl())
                 .placeholder(R.drawable.ic_launcher)
                 .resize(100, 100)
@@ -126,5 +134,23 @@ public class ContactActivity extends AppCompatActivity implements Callback<Respo
             notifyOwner.setEnabled(true);
             notifyOwner.setText("Notify Owner");
         }
+    }
+
+    public boolean onCreateOptionsMenu(final Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_logout, menu);
+        return super.onCreateOptionsMenu(menu);
+
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(final MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.logout:
+                startActivity(new Intent(this, BooksListActivity.class));
+                PreferenceUtils.clear(this);
+                finish();
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

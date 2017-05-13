@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">UsedBooks</string>
+    <string name="app_name">BLX</string>
 
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
@@ -11,7 +11,7 @@
     <string name="name">Full Name</string>
     <string name="email">Email</string>
     <string name="phoneno">Phone number</string>
-    <string name="phoneno2">Contact number</string>
+    <string name="phoneno2">Phone number 2</string>
     <string name="address">Address</string>
     <string name="city">City</string>
     <string name="state">State</string>
@@ -25,6 +25,7 @@
     <string name="btn_login">Login</string>
     <string name="postbook">POST BOOK</string>
     <string name="viewbook">VIEW BOOK</string>
+    <string name="message">COMMENTS</string>
 
 
 

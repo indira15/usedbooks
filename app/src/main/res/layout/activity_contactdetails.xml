@@ -108,6 +108,14 @@
       android:layout_margin="@dimen/margin_medium"
       />
 
+        <TextView
+            android:id="@+id/userContact02"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_medium"
+            android:layout_margin="@dimen/margin_medium"
+            />
+
     <TextView
       android:id="@+id/address"
       android:layout_width="wrap_content"

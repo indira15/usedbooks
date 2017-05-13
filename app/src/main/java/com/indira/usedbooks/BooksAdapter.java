@@ -1,6 +1,6 @@
 package com.indira.usedbooks;
 
-import android.app.Activity;
+//import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
@@ -15,6 +15,8 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
+//import okhttp3.internal.Util;
+
 /**
  * Created by Manish on 08-04-2017.
  */
@@ -23,10 +25,16 @@ public class BooksAdapter extends RecyclerView.Adapter<BookViewHolder> {
 
     private ArrayList<Book> mBookList;
     private Context mContext;
+    private String mSearchString;
 
     public BooksAdapter(ArrayList<Book> bookList, Context context) {
         this.mBookList = bookList;
         this.mContext = context;
+    }
+
+    public void notifyDataChanged(String query) {
+        mSearchString = query;
+        notifyDataSetChanged();
     }
 
     @Override
@@ -38,9 +46,13 @@ public class BooksAdapter extends RecyclerView.Adapter<BookViewHolder> {
     @Override
     public void onBindViewHolder(BookViewHolder holder, int position) {
         final Book book = mBookList.get(position);
-        holder.nameView.setText(book.getName());
-        holder.costView.setText(String.valueOf(book.getCost()));
-        holder.userNameView.setText(" by " + book.getUser().getName());
+        if(!TextUtils.isEmpty(mSearchString)) {
+            holder.nameView.setText(Utils.highlight(mSearchString, book.getName()));
+        }else {
+            holder.nameView.setText(book.getName());
+        }
+        holder.costView.setText(String.valueOf("Rs: "+ book.getCost()));
+        holder.userNameView.setText(" Posted by " + book.getUser().getName());
 
         if (!TextUtils.isEmpty(book.getImageUrl())) {
             Picasso.with(mContext).load(book.getImageUrl())
@@ -48,12 +60,21 @@ public class BooksAdapter extends RecyclerView.Adapter<BookViewHolder> {
                     .resize(80, 80)
                     .into(holder.imageView);
         }
+
         holder.item.setOnClickListener(new OnClickListener() {
             @Override
+
             public void onClick(final View view) {
-                Intent contactIntent = new Intent(mContext, ContactActivity.class);
+                if (PreferenceUtils.isLoggedIn(mContext))
+                {
+                    Intent contactIntent = new Intent(mContext, ContactActivity.class);
                 contactIntent.putExtra("book", book);
                 mContext.startActivity(contactIntent);
+            }
+                else
+                {
+                    Utils.showToast(mContext,"Please login to view details");
+                }
             }
         });
     }

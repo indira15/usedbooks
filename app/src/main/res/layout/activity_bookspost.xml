@@ -22,19 +22,22 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:hint="@string/author_name"
-        android:inputType="text" />
+        android:inputType="text"
+        android:maxLength="20"/>
 
     <EditText
         android:id="@+id/edition"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:hint="@string/edition"
-        android:inputType="text" />
+        android:inputType="text"
+        android:maxLength="15"/>
     <EditText
         android:id="@+id/cost"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:hint="@string/cost"
+        android:maxLength="6"
         android:inputType="numberDecimal" />
 
     <Button
