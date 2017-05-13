@@ -22,6 +22,9 @@ import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.TextUtils;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
@@ -307,6 +310,21 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
       }
     }
   }
+
+  public boolean onCreateOptionsMenu ( final Menu menu){
+    MenuInflater inflater = getMenuInflater();
+    inflater.inflate(R.menu.menu_feedback_list, menu);
+    return super.onCreateOptionsMenu(menu);
+  }
+  public boolean onOptionsItemSelected ( final MenuItem item){
+    switch (item.getItemId()) {
+      case R.id.feedbacklistview:
+        startActivity(new Intent(this, RegisterActivity.class));
+        finish();
+    }
+    return super.onOptionsItemSelected(item);
+  }
+
 
   @Override
   public void onFailure(final Call<Response> call, final Throwable t) {

@@ -5,11 +5,20 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.Typeface;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.ContextCompat;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.BackgroundColorSpan;
+import android.text.style.TextAppearanceSpan;
 import android.widget.Toast;
+
+import java.text.Normalizer;
 import java.util.Random;
 import java.util.UUID;
 
@@ -48,6 +57,28 @@ public class Utils {
             r.play();
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+    public static CharSequence highlight(String search, String originalText) {
+        // ignore case and accents
+        // the same thing should have been done for the search text
+        String normalizedText = Normalizer.normalize(originalText,
+                Normalizer.Form.NFD).replaceAll("\\p{InCombiningDiacriticalMarks}+", "").toLowerCase();
+
+        int start = normalizedText.indexOf(search);
+        if (start < 0) {
+            // not found, nothing to to
+            return originalText;
+        } else {
+            Spannable spannable = new SpannableString(originalText);
+            ColorStateList blueColor = new ColorStateList(new int[][]{new int[]{}}, new int[]{
+                    ContextCompat.getColor(UsedbooksApplication.getInstance(), R.color.colorPrimary)
+            });
+            TextAppearanceSpan highlightSpan = new TextAppearanceSpan(null, Typeface.BOLD_ITALIC,
+                    -1, blueColor, null);
+            spannable.setSpan(highlightSpan, start, start + search.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+            return spannable;
         }
     }
 }

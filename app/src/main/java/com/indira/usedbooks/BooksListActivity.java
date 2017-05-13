@@ -5,24 +5,32 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 
 import com.indira.usedbooks.entity.Book;
 import com.indira.usedbooks.entity.Books;
+import com.jakewharton.rxbinding2.widget.RxSearchView;
+import com.jakewharton.rxbinding2.widget.SearchViewQueryTextEvent;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.observers.DisposableObserver;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -38,6 +46,10 @@ public class BooksListActivity extends AppCompatActivity  implements Callback<Bo
     private ProgressBar mProgressBar;
     private FloatingActionButton fab;
     public static String RESTART_ACTION = "restart_action";
+    private SearchView mSearchView;
+    private Disposable mDisposable;
+    private ArrayList<Book> originalList = new ArrayList<>();
+    private String mQuery;
 
 
     @Override
@@ -47,6 +59,9 @@ public class BooksListActivity extends AppCompatActivity  implements Callback<Bo
         recyclerView = (RecyclerView) findViewById(R.id.booklistview);
         mProgressBar = (ProgressBar) findViewById(R.id.progress_bar);
         booksAdapter = new BooksAdapter(bookList ,this);
+        mSearchView = (SearchView) findViewById(R.id.search_view);
+        mSearchView.setIconifiedByDefault(false);
+        mSearchView.setQueryHint("Search by Book Name");
 
         fab = (FloatingActionButton) findViewById(R.id.fab);
         RecyclerView.LayoutManager layoutManager= new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false);
@@ -54,6 +69,7 @@ public class BooksListActivity extends AppCompatActivity  implements Callback<Bo
         recyclerView.setAdapter(booksAdapter);
         mProgressBar.setVisibility(View.VISIBLE);
         prepareBookData();
+
         fab.setOnClickListener(new View.OnClickListener()
         {
             public void onClick(View view){
@@ -66,8 +82,46 @@ public class BooksListActivity extends AppCompatActivity  implements Callback<Bo
             }
 
         });
+        mDisposable = RxSearchView.queryTextChangeEvents(mSearchView)
+                .debounce(400, TimeUnit.MILLISECONDS) // default Scheduler is Computation
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(_getSearchObserver());
+    }
 
+    private DisposableObserver<SearchViewQueryTextEvent> _getSearchObserver() {
+        return new DisposableObserver<SearchViewQueryTextEvent>() {
+            @Override
+            public void onComplete() {
+            }
 
+            @Override
+            public void onError(Throwable e) {
+            }
+
+            @Override
+            public void onNext(SearchViewQueryTextEvent onTextChangeEvent) {
+                String query = onTextChangeEvent.queryText().toString();
+                searchBooksByNameAndAuthor(query);
+            }
+        };
+    }
+
+    private void searchBooksByNameAndAuthor(String query) {
+        if(!TextUtils.isEmpty(query) && originalList.size() > 0) {
+            query = query.toLowerCase();
+            mQuery = query;
+            bookList.clear();
+            for (Book book : originalList) {
+                if (book.getName().toLowerCase().contains(query)) {
+                    bookList.add(book);
+                }
+            }
+        } else {
+            mQuery = null;
+            bookList.clear();
+            bookList.addAll(originalList);
+        }
+        booksAdapter.notifyDataChanged(mQuery);
     }
 
     private void prepareBookData()
@@ -83,10 +137,12 @@ public class BooksListActivity extends AppCompatActivity  implements Callback<Bo
             if (response.isSuccessful()) {
                 Books booksPresent = response.body();
                 bookList.clear();
+                originalList.clear();
+                originalList.addAll(booksPresent.books);
                 bookList.addAll(booksPresent.books);
                 mProgressBar.setVisibility(View.GONE);
                 recyclerView.setVisibility(View.VISIBLE);
-                booksAdapter.notifyDataSetChanged();
+                booksAdapter.notifyDataChanged(mQuery);
             } else {
                 Utils.showToast(BooksListActivity.this, "Something went wrong");
             }
@@ -137,5 +193,13 @@ public class BooksListActivity extends AppCompatActivity  implements Callback<Bo
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mDisposable != null){
+            mDisposable.dispose();
+        }
     }
 }

@@ -45,9 +45,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 
 
-/**
- * Created by Manish on 09-04-2017.
- */
+
 
 public class BookPostActivity extends AppCompatActivity implements OnClickListener,
         Callback<Response> {
@@ -87,25 +85,25 @@ public class BookPostActivity extends AppCompatActivity implements OnClickListen
         if(TextUtils.isEmpty(name))
         {
             error = true;
-            bookname.setError("Please enter the book name");
+            bookname.setError("Please enter the bookname");
         }
 
         if (TextUtils.isEmpty(author))
         {
             error = true;
-            authorname.setError("Please enter the author name");
+            authorname.setError("Please enter the authorname");
         }
 
         if (TextUtils.isEmpty(edition))
         {
             error = true;
-            authorname.setError("Please enter the mEdition");
+            mEdition.setError("Please enter the Edition");
         }
 
         if (TextUtils.isEmpty(cost))
         {
             error = true;
-            authorname.setError("Please enter the mCost");
+            mCost.setError("Please enter the Cost");
         }
         File imageFile = null;
         if (!TextUtils.isEmpty(mCurrentPhotoPath)) {
