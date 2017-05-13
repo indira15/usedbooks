@@ -1,3 +1,4 @@
+/*
 package com.indira.usedbooks;
 
 import android.content.Context;
@@ -10,9 +11,10 @@ import com.indira.usedbooks.entity.Feedback;
 
 import java.util.ArrayList;
 
-/**
+*
  * Created by Manish on 08-05-2017.
- */
+
+
 
 public class FeedbackAdapter extends RecyclerView.Adapter<FeedbackViewHolder>{
 
@@ -44,3 +46,4 @@ public class FeedbackAdapter extends RecyclerView.Adapter<FeedbackViewHolder>{
         return mFeedbackList.size();
     }
 }
+*/

@@ -1,3 +1,4 @@
+/*
 package com.indira.usedbooks;
 
 import android.content.Intent;
@@ -17,9 +18,11 @@ import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 
+*/
 /**
  * Created by Manish on 09-05-2017.
- */
+ *//*
+
 
 public class FeedbackPostActivity extends AppCompatActivity implements View.OnClickListener, Callback<Response> {
 
@@ -113,3 +116,4 @@ public class FeedbackPostActivity extends AppCompatActivity implements View.OnCl
 
 
 
+*/
