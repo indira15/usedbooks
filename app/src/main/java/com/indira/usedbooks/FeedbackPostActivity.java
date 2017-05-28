@@ -34,6 +34,7 @@ public class FeedbackPostActivity extends AppCompatActivity implements View.OnCl
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_feedbackpost);
         comment = (EditText) findViewById(R.id.post_message);
+        submit = (Button) findViewById(R.id.submit);
         submit.setOnClickListener(this);
     }
 
