@@ -26,12 +26,9 @@
     <string name="postbook">POST BOOK</string>
     <string name="viewbook">VIEW BOOK</string>
     <string name="message">COMMENTS</string>
-
-
-
-
-
-
+    <string name="viewfeedback">VIEW FEEDBACK</string>
+    <string name="postfeedback">POST FEEDBACK</string>
+    <string name="post_message">COMMENTS</string>
     <string name="action_sign_in">Sign in</string>
     <string name="action_sign_in_short">Sign in</string>
     <string name="error_invalid_email">This email address is invalid</string>

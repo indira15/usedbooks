@@ -7,32 +7,32 @@ import java.io.Serializable;
  */
 
 public class Feedback implements Serializable {
-    private int id;
+    private int fedid;
     private  String message;
-    private int date;
+    private String date;
     private User user;
 
-    public int getId() {
-        return id;
+    public int getFedid() {
+        return fedid;
     }
 
     public String getMessage() {
         return message;
     }
 
-    public int getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setFedid(int fedid) {
+        this.fedid = fedid;
     }
 
     public void setMessage(String message) {
         this.message = message;
     }
 
-    public void setDate(int date) {
+    public void setDate(String date) {
         this.date = date;
     }
 

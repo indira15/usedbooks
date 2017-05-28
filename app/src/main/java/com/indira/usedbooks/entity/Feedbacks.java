@@ -7,5 +7,5 @@ import java.util.ArrayList;
  */
 
 public class Feedbacks {
-    public ArrayList<Feedback> feedback = new  ArrayList<>();
+    public ArrayList<Feedback> feedbacks = new  ArrayList<>();
 }

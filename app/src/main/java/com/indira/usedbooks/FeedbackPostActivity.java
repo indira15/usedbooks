@@ -1,4 +1,4 @@
-/*
+
 package com.indira.usedbooks;
 
 import android.content.Intent;
@@ -18,31 +18,31 @@ import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 
-*/
+
 /**
  * Created by Manish on 09-05-2017.
- *//*
+ */
 
 
 public class FeedbackPostActivity extends AppCompatActivity implements View.OnClickListener, Callback<Response> {
 
-    private EditText message;
+    private EditText comment;
     private Button submit;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_feedbackpost);
-        message = (EditText) findViewById(R.id.message);
+        comment = (EditText) findViewById(R.id.post_message);
         submit.setOnClickListener(this);
     }
 
     private void validateData() {
-        String data = message.getText().toString().trim();
+        String data = comment.getText().toString().trim();
         boolean error = false;
         if (TextUtils.isEmpty(data)) {
             error = true;
-            message.setError("Please enter the bookname");
+            comment.setError("Please enter the bookname");
         }
         if (error) {
             Utils.showToast(this, "Please fill the required details");
@@ -51,15 +51,15 @@ public class FeedbackPostActivity extends AppCompatActivity implements View.OnCl
         }
 
 
-        GetFeedbackInterface service = UsedbooksApplication.getInstance().getRetrofit().
-                create(GetFeedbackInterface.class);
+        GetFeedbacksInterface service = UsedbooksApplication.getInstance().getRetrofit().
+                create(GetFeedbacksInterface.class);
 
         RequestBody messageBody = RetrofitUtils.createPartFromString(data);
         RequestBody userIdBody = RetrofitUtils.createPartFromString(String.valueOf(PreferenceUtils.
                 getIntegerPrefs(this, PreferenceUtils.SAVED_USER_ID)));
 
         HashMap<String, RequestBody> map = new HashMap<>();
-        map.put("message", messageBody);
+        map.put("comment", messageBody);
         map.put("user_id", userIdBody);
 
         Call<Response> call = service.addFeedback(map);
@@ -89,7 +89,7 @@ public class FeedbackPostActivity extends AppCompatActivity implements View.OnCl
                 if (responseBody.getSuccess() == 1) {
                     submit.setText("Success");
                     Utils.showToast(FeedbackPostActivity.this, "Success!" + responseBody.getMessage());
-                    Intent listIntent = new Intent(this, FeedbackListActivity.class);
+                    Intent listIntent = new Intent(this, FeedbacksListActivity.class);
                     listIntent.setAction(BooksListActivity.RESTART_ACTION);
                     startActivity(listIntent);
                     finish();
@@ -116,4 +116,4 @@ public class FeedbackPostActivity extends AppCompatActivity implements View.OnCl
 
 
 
-*/
+

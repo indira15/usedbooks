@@ -15,7 +15,6 @@ import android.content.CursorLoader;
 import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.AsyncTask;
 
 import android.os.Build;
 import android.os.Bundle;
@@ -319,7 +318,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
   public boolean onOptionsItemSelected ( final MenuItem item){
     switch (item.getItemId()) {
       case R.id.feedbacklistview:
-        startActivity(new Intent(this, RegisterActivity.class));
+        startActivity(new Intent(this, FeedbackPostActivity.class));
         finish();
     }
     return super.onOptionsItemSelected(item);

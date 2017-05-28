@@ -33,7 +33,6 @@ public class FeedbacksListActivity extends AppCompatActivity implements Callback
     private ProgressBar progressBar;
     private FloatingActionButton fab;
     public static String RESTART_ACTION = "restart_action";
-    private ArrayList<Feedback> originalList = new ArrayList<>();
     //private String mQuery;
 
     public void onCreate(Bundle savedInstanceState){
@@ -48,7 +47,6 @@ public class FeedbacksListActivity extends AppCompatActivity implements Callback
         recyclerView.setAdapter(feedbackAdapter);
         progressBar.setVisibility(View.VISIBLE);
         prepareFeedbackData();
-
         fab.setOnClickListener(new View.OnClickListener()
         {
             public void onClick(View view){
@@ -77,12 +75,10 @@ public class FeedbacksListActivity extends AppCompatActivity implements Callback
             if (response.isSuccessful()) {
                 Feedbacks feedbackPresent = response.body();
                 feedbackList.clear();
-                originalList.clear();
-                originalList.addAll(feedbackPresent.feedbacks);
                 feedbackList.addAll(feedbackPresent.feedbacks);
                 progressBar.setVisibility(View.GONE);
                 recyclerView.setVisibility(View.VISIBLE);
-                // booksAdapter.notifyDataChanged(mQuery);
+                feedbackAdapter.notifyDataSetChanged();
             } else {
                 Utils.showToast(FeedbacksListActivity.this, "Something went wrong");
             }

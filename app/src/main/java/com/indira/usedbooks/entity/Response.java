@@ -20,11 +20,11 @@ public class Response {
 
     public String getMessage() {
         return message;
-    }
+   }
 
-    public void setMessage(String message) {
-        this.message = message;
-    }
+   public void setMessage(String message) {
+      this.message = message;
+   }
 
     public User getUser() {
         return user;

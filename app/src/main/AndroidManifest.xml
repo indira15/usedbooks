@@ -44,6 +44,10 @@
             android:label="@string/btn_register"></activity>
         <activity android:name=".ContactActivity">
         </activity>
+        <activity android:name=".FeedbacksListActivity"
+            android:label="@string/viewfeedback"></activity>
+        <activity android:name=".FeedbackPostActivity"
+            android:label="@string/postfeedback"></activity>
 
         <provider
             android:name="android.support.v4.content.FileProvider"
