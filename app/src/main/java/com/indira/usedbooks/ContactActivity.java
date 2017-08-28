@@ -11,6 +11,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.indira.usedbooks.entity.Book;
 import com.indira.usedbooks.entity.Response;
 import com.indira.usedbooks.entity.User;
@@ -147,6 +148,9 @@ public class ContactActivity extends AppCompatActivity implements Callback<Respo
     public boolean onOptionsItemSelected(final MenuItem item) {
         switch (item.getItemId()) {
             case R.id.logout:
+                FirebaseMessaging.getInstance().unsubscribeFromTopic("usedbooks_" +
+                    PreferenceUtils.getIntegerPrefs(this, PreferenceUtils
+                        .SAVED_USER_ID));
                 startActivity(new Intent(this, BooksListActivity.class));
                 PreferenceUtils.clear(this);
                 finish();

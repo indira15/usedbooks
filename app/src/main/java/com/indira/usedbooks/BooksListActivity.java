@@ -19,6 +19,7 @@ import android.widget.SearchView;
 import android.widget.Toast;
 
 
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.indira.usedbooks.entity.Book;
 import com.indira.usedbooks.entity.Books;
 import com.jakewharton.rxbinding2.widget.RxSearchView;
@@ -176,6 +177,9 @@ public class BooksListActivity extends AppCompatActivity  implements Callback<Bo
             MenuItem registerItem  = menu.findItem(R.id.register);
             registerItem.setTitle(PreferenceUtils.getStringPrefs(this, PreferenceUtils
                 .SAVED_USER_NAME));
+            FirebaseMessaging.getInstance().subscribeToTopic("usedbooks_" +
+                PreferenceUtils.getIntegerPrefs(this, PreferenceUtils
+                .SAVED_USER_ID));
         }
         return true;
     }
